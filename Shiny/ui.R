@@ -41,7 +41,7 @@ shinyUI(navbarPage("Minería de datos Perú",theme = shinytheme("flatly"),
                               )
                               
                             )
-                   )
+                   ),
 #                    tabPanel("Comportamiento de compra por grupo",
 #                             sidebarLayout(
 #                               sidebarPanel(
@@ -67,21 +67,21 @@ shinyUI(navbarPage("Minería de datos Perú",theme = shinytheme("flatly"),
 #                                 
 #                               )
 #                    ),
-#                    tabPanel("Cruce de variables",
-#                             sidebarLayout(
-#                               sidebarPanel(
-#                                 menu4(),
-#                                 width = 2
-#                               ),    
-#                               mainPanel(
-#                                 tabsetPanel(
-#                                   tabPanel("Algo",
-#                                            column(5,plotOutput("plot",height=100,width=1300)),align="center")
-#                                 )
-#                                 
-#                               )
-#                             )
-#                    ),
+                   tabPanel("Cruce de variables",
+                            sidebarLayout(
+                              sidebarPanel(
+                                menu4(),
+                                width = 2
+                              ),    
+                              mainPanel(
+                                tabsetPanel(
+                                  tabPanel("Algo",
+                                           column(5,plotOutput("graf_cruces",height=100,width=1300)),align="center")
+                                )
+                                
+                              )
+                            )
+                   )
 #                    tabPanel("Pedidos",
 #                             sidebarLayout(
 #                               sidebarPanel(

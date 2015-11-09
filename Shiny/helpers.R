@@ -69,7 +69,21 @@ menu4 <- function(){
         '2008' = '2008',
         '2008 - 2011' = '2008 - 2011',
         '2012 - 2015' = '2012 - 2015'),
-      selected = c('2008'))
+      selected = c('2008')),
+    helpText(h4('Selecciona los años que quieres ver.')),
+    selectInput(
+      'var_cruce_1', 
+      label = '',
+      choices = list(
+        'Estado Civil'),
+      selected = c('Estado Civil')),
+    helpText(h4('Selecciona los años que quieres ver.')),
+    selectInput(
+      'var_cruce_2', 
+      label = '',
+      choices = list(
+        'Estado Civil'),
+      selected = c('Estado Civil'))
     # )
   )}
 

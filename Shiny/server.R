@@ -25,6 +25,8 @@ shinyServer(function(input, output,session){
     width = 1300
   )
 
-
+output$graf_cruces <- renderPlot({
+  
+})
   
 })
