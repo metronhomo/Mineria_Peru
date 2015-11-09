@@ -10,5 +10,6 @@
 *.Rdata
 *.rdata
 *.log
+Shiny/data/*
 Shiny/rsconnect/*
 *.pdf
