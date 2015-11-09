@@ -88,8 +88,6 @@ menu5 <- function(){
     # )
   )}
 
-
-
 g_legend<-function(a.gplot){ 
   tmp <- ggplot_gtable(ggplot_build(a.gplot)) 
   leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box") 
@@ -349,4 +347,54 @@ graficas2<-function(i){
   
 }
 
+filtro <- function(base,filtro){
+  if (filtro == '2008'){
+    df <-base %>%
+      mutate(anio_llegada=as.integer(as.character(anio_llegada))) %>%
+      filter(anio_llegada<2008)
+  }else{
+    if (filtro == '2008 - 2011'){
+      df <-base %>%
+        mutate(anio_llegada=as.integer(as.character(anio_llegada))) %>%
+        filter(anio_llegada>=2008 & anio_llegada<=2011)
+    }else{
+      df <-base %>%
+        mutate(anio_llegada=as.integer(as.character(anio_llegada))) %>%
+        filter(anio_llegada>2011)
+      }
+  }
+  return(df)
+}
+
+graf1<-function(base,filtro){
+  base <- filtro(base,filtro)
+  
+  personas <- base %>%
+    dplyr::group_by(Folio,Pais,Canal,Tienda_Registro,clase) %>%
+    dplyr::summarise(personas=n()) %>%
+    dplyr::group_by(clase) %>%
+    dplyr::summarise(personas=n()) %>%
+    dplyr::mutate(porc_personas=personas/sum(personas))
+  
+  dinero <- base %>%
+    dplyr::group_by(clase) %>% 
+    dplyr::summarise(dinero=sum(as.numeric(Saldo))) %>%
+    dplyr::mutate(porc_dinero=dinero/sum(dinero))
+  
+  productos <- base %>%
+    dplyr::group_by(clase) %>% 
+    dplyr::summarise(productos = sum(Mercancias_P,Motos_P,Telycomp_P,Personales_P,TAZ_P)) %>%
+    dplyr::mutate(porc_productos=productos/sum(productos))
+  
+  people<-graf_barras(df=personas,var_x="clase",var_y="porc_personas",
+                      titulo="Distribución de personas vista por grupo",x_lab="Grupo")
+  products<-graf_barras(df=productos,var_x="clase",var_y="porc_productos",
+                        titulo="Distribución de productos vista por grupo",x_lab="Grupo")
+  money<-graf_barras(df=dinero,var_x="clase",var_y="porc_dinero",
+                     titulo="Distribución del gasto vista por grupo",x_lab="Grupo")
+  
+  grafca<-grid.arrange(people,products,money,ncol=1)
+  
+  return(grafica)
+}
 
