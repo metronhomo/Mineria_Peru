@@ -24,6 +24,12 @@ shinyServer(function(input, output,session){
     height = 1000,
     width = 1300
   )
+  
+  output$personas <- renderPlot({
+    graf1(base,input$filtroAnio1)},
+    height = 1000,
+    width = 1300
+  )
 
 output$graf_cruces <- renderPlot({
   

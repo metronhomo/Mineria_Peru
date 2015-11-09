@@ -5,7 +5,7 @@ library(ggplot2)
 library(scales)
 
 # Base_Peru_con_Grupos_y_Catalogo_sin_LINEA_CREDITO <- readRDS("./data/Base_Peru_con_Grupos_y_Catalogo_sin_LINEA_CREDITO.RDS")
-Base_Red_Corregida_sin_LINEA_CREDITO <- readRDS("./data/Base_Red_Corregida_sin_LINEA_CREDITO.RDS")
+base <- readRDS("./data/Base_Red_Corregida_sin_LINEA_CREDITO.RDS")
 Base_caracterizacion_grupos <- readRDS("./data/Base_caracterizacion_grupos.RDS")
 cluster_2008_2011 <- readRDS("./data/cluster_2008_2011.RDS")
 cluster_2012_2015 <- readRDS("./data/cluster_2012_2015.RDS")
