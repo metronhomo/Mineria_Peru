@@ -25,12 +25,82 @@ shinyServer(function(input, output,session){
     width = 1300
   )
   
-  output$personas <- renderPlot({
-    graf1(base,input$filtroAnio1)},
+  output$personas_productos_gasto <- renderPlot({
+    graf1(base,input$filtroAnio2)},
+    height = 1000,
+    width = 1300
+  )
+  
+  output$genero <- renderPlot({
+    graf2(base,input$filtroAnio2)},
+    height = 1000,
+    width = 1300
+  )
+  
+  output$edo_civil <- renderPlot({
+    graf3(base,input$filtroAnio2)},
+    height = 1000,
+    width = 1300
+  )
+  
+  output$edad <- renderPlot({
+    graf4(base,input$filtroAnio2)},
+    height = 1000,
+    width = 1300
+  )
+  
+  output$ing_mensual <- renderPlot({
+    graf5(base,input$filtroAnio2)},
+    height = 1000,
+    width = 1300
+  )
+  
+  output$edad_anio_llegada <- renderPlot({
+    graf6(base,input$filtroAnio2)},
     height = 1000,
     width = 1300
   )
 
+  output$ped_saldados <- renderPlot({
+    graf7(base,input$filtroAnio3)},
+    height = 1000,
+    width = 1300
+  )
+  
+  output$ped_activos <- renderPlot({
+    graf8(base,input$filtroAnio3)},
+    height = 1000,
+    width = 1300
+  )
+  
+  output$atrasos<- renderPlot({
+    graf9(base,input$filtroAnio3)},
+    height = 1000,
+    width = 1300
+  )
+  
+  output$ped_cancelados <- renderPlot({
+    graf10(base,input$filtroAnio3)},
+    height = 1000,
+    width = 1300
+  )
 
+  output$anios_1C <- renderPlot({
+    graf11(base,input$filtroAnio3)},
+    height = 1000,
+    width = 1300
+  )
+  
+  output$anios_UC <- renderPlot({
+    graf12(base,input$filtroAnio3)},
+    height = 1000,
+    width = 1300
+  )
+  
+  output$compras_anio_gpo <- renderPlot({
+    graf13(base,input$filtroAnio3)},
+    height = 1000,
+    width = 1300
+  )
   
 })

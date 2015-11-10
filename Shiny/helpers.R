@@ -347,26 +347,23 @@ graficas2<-function(i){
   
 }
 
-filtro <- function(base,filtro){
-  if (filtro == '2008'){
+filtro <- function(base,fl){
+  if (fl == '2008'){
     df <-base %>%
-      mutate(anio_llegada=as.integer(as.character(anio_llegada))) %>%
       filter(anio_llegada<2008)
   }else{
-    if (filtro == '2008 - 2011'){
+    if (fl == '2008 - 2011'){
       df <-base %>%
-        mutate(anio_llegada=as.integer(as.character(anio_llegada))) %>%
-        filter(anio_llegada>=2008 & anio_llegada<=2011)
+        filter(between(anio_llegada,2008,2011))
     }else{
       df <-base %>%
-        mutate(anio_llegada=as.integer(as.character(anio_llegada))) %>%
         filter(anio_llegada>2011)
       }
   }
   return(df)
 }
 
-graf1<-function(base,filtro){
+graf1 <- function(base,filtro){
   base <- filtro(base,filtro)
   
   personas <- base %>%
@@ -393,8 +390,188 @@ graf1<-function(base,filtro){
   money<-graf_barras(df=dinero,var_x="clase",var_y="porc_dinero",
                      titulo="Distribución del gasto vista por grupo",x_lab="Grupo")
   
-  grafca<-grid.arrange(people,products,money,ncol=1)
+  grafica<-grid.arrange(people,products,money,ncol=1)
   
   return(grafica)
+}
+
+graf2 <- function(base,filtro){
+  base <- filtro(base,filtro)
+  
+  x<-as.data.frame(prop.table(table(base$Sexo,base$clase),2))
+  y<-as.data.frame(prop.table(table(base$Sexo)))
+  y$Var2<-"General"
+  x<-rbind(x,y[,c(1,3,2)])
+  names(x)<-c("Genero","clase","Porc")
+  levels(x$Genero) <- c("Femenino","Masculino")
+  
+  graf_barras(df=x,var_x="Genero",var_y="Porc",facet=T,var_facet="clase",
+              angulo=90,x_lab="Género")
+}
+
+graf3 <- function(base,filtro){
+  base <- filtro(base,filtro)
+  
+  x<-as.data.frame(prop.table(table(base$Edocivil,base$clase),2))
+  y<-as.data.frame(prop.table(table(base$Edocivil)))
+  y$Var2<-"General"
+  x<-rbind(x,y[,c(1,3,2)])
+  names(x)<-c("Edo_Civil","clase","Porc")
+  
+  graf_barras(df=x,var_x="Edo_Civil",var_y="Porc",facet=T,var_facet="clase",
+              angulo=90,x_lab="Estado Civil") 
+}
+
+graf4 <- function(base,filtro){
+  base <- filtro(base,filtro)
+  x<-as.data.frame(prop.table(table(base$Edad_C,base$clase),2))
+  y<-as.data.frame(prop.table(table(base$Edad_C)))
+  y$Var2<-"General"
+  x<-rbind(x,y[,c(1,3,2)])
+  names(x)<-c("Edad","clase","Porc")
+  
+  graf_barras(df=x,var_x="Edad",var_y="Porc",
+              titulo="Distribución de la Edad vista por grupo",facet=T,var_facet="clase",
+              angulo=90,x_lab="Edad")
+}
+
+graf5 <- function(base,filtro){
+  base <- filtro(base,filtro)
+  
+  ingreso <- base %>%
+    filter(Ingreso_C!="Cero")
+  
+  x<-as.data.frame(prop.table(table(ingreso$Ingreso_C,ingreso$clase),2))
+  y<-as.data.frame(prop.table(table(ingreso$Ingreso_C)))
+  y$Var2<-"General"
+  x<-rbind(x,y[,c(1,3,2)])
+  names(x)<-c("Ingreso_Mensual","clase","Porc")
+  
+  graf_barras(df=x,var_x="Ingreso_Mensual",var_y="Porc",
+              titulo="Distribución del Ingreso Mensual vista por grupo",facet=T,
+              var_facet="clase", angulo=90,x_lab="Ingreso Mensual")
+}
+
+graf6 <- function(base,filtro){
+  base <- filtro(base,filtro)
+  edades_anio2<-base %>%
+    group_by(clase,anio_llegada,edad_llegada.C)%>%
+    summarise(conteo=n()) %>%
+    mutate(p_conteo=conteo/sum(conteo))%>%
+    filter(edad_llegada.C!="1 a 17")
+  
+  ggplot(edades_anio2,aes(x=anio_llegada,y=p_conteo,group=factor(edad_llegada.C),
+                          colour=factor(edad_llegada.C))) + 
+    geom_smooth(alpha=.4) +
+    scale_x_continuous(breaks = seq(2000,2015, by = 1)) +
+    scale_y_continuous(labels=percent) +
+    theme(axis.text=element_text(size=14),
+          legend.title = element_text(size=14),
+          legend.text = element_text(size = 14),
+          axis.text.x  = element_text(angle=90),
+          axis.text.x  = element_text(angle=90),
+          text=element_text(size=20),
+          panel.background=element_rect(fill='snow2'),
+          strip.background=element_rect(fill='skyblue4'),
+          strip.text.x = element_text(colour = "white",size=15)) +
+    guides(col=guide_legend(title.hjust =0.5)) +
+    scale_color_discrete(name="Edad") +
+    facet_wrap(~clase,ncol=5) +
+    xlab("Año") + 
+    ylab("Porcentaje de Ingreso") +
+    ggtitle("Ingreso de personas por edad y año")
+}
+
+graf7 <- function(base,filtro){
+  base <- filtro(base,filtro)
+  x<-as.data.frame(prop.table(table(base$Saldados_C,base$clase),2))
+  y<-as.data.frame(prop.table(table(base$Saldados_C)))
+  y$Var2<-"General"
+  x<-rbind(x,y[,c(1,3,2)])
+  names(x)<-c("Saldados","clase","Porc")
+  
+  graf_barras(df=x,var_x="Saldados",var_y="Porc",
+              titulo="Distribución del Número de pedidos saldados vista por grupo",facet=T,
+              var_facet="clase", angulo=90,x_lab="Pedidos Saldados")
+}
+
+graf8 <- function(base,filtro){
+  base <- filtro(base,filtro)
+  x<-as.data.frame(prop.table(table(base$Activos_C,base$clase),2))
+  y<-as.data.frame(prop.table(table(base$Activos_C)))
+  y$Var2<-"General"
+  x<-rbind(x,y[,c(1,3,2)])
+  names(x)<-c("Activos","clase","Porc")
+  
+  graf_barras(df=x,var_x="Activos",var_y="Porc",
+              titulo="Distribución del Número de pedidos activos vista por grupo",facet=T,
+              var_facet="clase", angulo=90,x_lab="Pedidos Activos")
+}
+
+graf9 <- function(base,filtro){
+  base <- filtro(base,filtro)
+  x<-as.data.frame(prop.table(table(base$Atrasos_C,base$clase),2))
+  y<-as.data.frame(prop.table(table(base$Atrasos_C)))
+  y$Var2<-"General"
+  x<-rbind(x,y[,c(1,3,2)])
+  names(x)<-c("Atrasos","clase","Porc")
+  
+  graf_barras(df=x,var_x="Atrasos",var_y="Porc",
+              titulo="Variable Atrasos vista por grupo",facet=T,
+              var_facet="clase", angulo=90,x_lab="Atrasos")
+}
+
+graf10 <- function(base,filtro){
+  base <- filtro(base,filtro)
+  x<-as.data.frame(prop.table(table(base$Cancelados_C,base$clase),2))
+  y<-as.data.frame(prop.table(table(base$Cancelados_C)))
+  y$Var2<-"General"
+  x<-rbind(x,y[,c(1,3,2)])
+  names(x)<-c("Cancelados","clase","Porc")
+  
+  graf_barras(df=x,var_x="Cancelados",var_y="Porc",
+              titulo="Distribución de los pedidos cancelados vista por grupo",facet=T,
+              var_facet="clase", angulo=90,x_lab="Cancelados")
+}
+
+graf11 <- function(base,filtro){
+  x<-as.data.frame(prop.table(table(base$anios_primercompra_C,base$clase),2))
+  y<-as.data.frame(prop.table(table(base$anios_primercompra_C)))
+  y$Var2<-"General"
+  x<-rbind(x,y[,c(1,3,2)])
+  names(x)<-c("A1C","clase","Porc")
+  
+  graf_barras(df=x,var_x="A1C",var_y="Porc",
+              titulo="Distribución de los años desde 1C vista por grupo",facet=T,
+              var_facet="clase", angulo=90,x_lab="Meses desde 1C")
+}
+
+graf12 <- function(base,filtro){
+  x<-as.data.frame(prop.table(table(base$meses_ultimacompra,base$clase),2))
+  y<-as.data.frame(prop.table(table(base$meses_ultimacompra)))
+  y$Var2<-"General"
+  x<-rbind(x,y[,c(1,3,2)])
+  names(x)<-c("MUC","clase","Porc")
+  
+  graf_barras(df=x,var_x="MUC",var_y="Porc",
+              titulo="Distribución de los meses desde UC vista por grupo",facet=T,
+              var_facet="clase", angulo=90,x_lab="Meses desde UC")
+}
+
+graf13 <- function(base,filtro){
+  base <- filtro(base,filtro)
+  ggplot(base,aes(x=semana_compra)) +
+    geom_density(fill="turquoise4",colour="black") +
+    theme(axis.text.x  = element_text(angle=90),
+          panel.background=element_rect(fill='snow2'),
+          strip.background=element_rect(fill='skyblue4'),
+          strip.text.x = element_text(colour = "white",size=15),
+          text = element_text(size=20)) +
+    scale_y_continuous(labels=percent) +
+    scale_x_continuous(breaks=seq(0,53,by=10),limits=c(0,53)) +
+    facet_grid(clase~anio_compra) +
+    xlab("Semana") + 
+    ylab("") +
+    ggtitle("Distribución de compras por grupo y año")
 }
 
