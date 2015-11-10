@@ -104,35 +104,25 @@ graf_barras<-function(df,var_x,var_y,titulo="",facet=F,var_facet="",
     names(df)<-c("var_x","var_y")
     
     ggplot(df,aes(x=var_x,y=var_y)) +
-      geom_bar(stat="identity",fill="turquoise4",colour="black") +
+      geom_bar(stat="identity",fill="#2c3e50",colour="black") +
       geom_text(aes(y=var_y + .03,label=round(var_y*100)),colour='black',size=6) +
-      theme(axis.text.x  = element_text(angle=angulo),
-            text=element_text(size=20),
-            panel.background=element_rect(fill='snow2'),
-            strip.background=element_rect(fill='skyblue4'),
-            strip.text.x=element_text(colour="white",size=15)) +
-      scale_y_continuous(labels=label) +
-      xlab(x_lab) +
-      ylab(y_lab) +
-      ggtitle(titulo)
+      theme_MH() +
+      scale_y_continuous(labels=label)  +
+      ylab("") +
+      xlab("")
   }else{    
     df<- df %>%
       dplyr::select(one_of(var_x,var_y,var_facet))
     names(df)<-c("var_x","var_y","var_facet")
     
     ggplot(df,aes(x=var_x,y=var_y)) +
-      geom_bar(stat="identity",fill="turquoise4",colour="black") +
+      geom_bar(stat="identity",fill="#2c3e50",colour="black") +
       geom_text(aes(y=var_y + .03,label=round(var_y*100)),colour='black',size=6) +
-      theme(axis.text.x  = element_text(angle=angulo),
-            text=element_text(size=20),
-            panel.background=element_rect(fill='snow2'),
-            strip.background=element_rect(fill='skyblue4'),
-            strip.text.x=element_text(colour="white",size=15)) +
+      theme_MH() +
       facet_wrap(~var_facet,ncol=n) +
-      scale_y_continuous(labels=label) +
-      xlab(x_lab) +
-      ylab(y_lab) + 
-      ggtitle(titulo)
+      scale_y_continuous(labels=label)  +
+      ylab("") +
+      xlab("")
   }
 }
 
@@ -145,33 +135,25 @@ graf_densidad<-function(df,var_x,facet=F,var_facet="",x_lim_min,n=1,
     names(df)<-c("var_x")
     
     ggplot(df,aes(x=var_x)) +
-      geom_density(fill="turquoise4",colour="black") +
-      theme(panel.background=element_rect(fill='snow2'),
-            text=element_text(size=20),
-            strip.background=element_rect(fill='skyblue4'),
-            strip.text.x=element_text(colour="white",size=15)) +
+      geom_density(fill="#2c3e50",colour="black") +
+      theme_MH() +
       scale_y_continuous(labels=label) +
-      scale_x_continuous(breaks=seq(x_lim_min,x_lim_max,by=salto),limits=c(x_lim_min,x_lim_max)) +
-      xlab(x_lab) + 
-      ylab(y_lab) +
-      ggtitle(titulo)
+      scale_x_continuous(breaks=seq(x_lim_min,x_lim_max,by=salto),limits=c(x_lim_min,x_lim_max))  +
+      ylab("") +
+      xlab("") 
   }else{    
     df<- df %>%
       dplyr::select(one_of(var_x,var_facet))
     names(df)<-c("var_x","var_facet")
     
     ggplot(df,aes(x=var_x)) +
-      geom_density(fill="turquoise4",colour="black") +
-      theme(panel.background=element_rect(fill='snow2'),
-            text=element_text(size=20),
-            strip.background=element_rect(fill='skyblue4'),
-            strip.text.x=element_text(colour="white",size=15)) +
+      geom_density(fill="#2c3e50",colour="black") +
+      theme_MH() +
       scale_y_continuous(labels=label) +
       scale_x_continuous(breaks=seq(x_lim_min,x_lim_max,by=salto),limits=c(x_lim_min,x_lim_max)) +
-      facet_wrap(~var_facet,ncol=n) +
-      xlab(x_lab) + 
-      ylab(y_lab) +
-      ggtitle(titulo)
+      facet_wrap(~var_facet,ncol=n)  +
+      ylab("") +
+      xlab("") 
   }
 }
 
@@ -347,24 +329,20 @@ graficas2<-function(i){
   
 }
 
-filtro <- function(base,fl){
+filtro <- function(fl){
   if (fl == '2008'){
-    df <-base %>%
-      filter(anio_llegada<2008)
+    df <-base_a_2008
   }else{
     if (fl == '2008 - 2011'){
-      df <-base %>%
-        filter(between(anio_llegada,2008,2011))
+      df <-base_2008_2011
     }else{
-      df <-base %>%
-        filter(anio_llegada>2011)
+      df <-base_2012_2015
       }
   }
   return(df)
 }
 
-graf1 <- function(base,filtro){
-  base <- filtro(base,filtro)
+graf1 <- function(base){
   
   personas <- base %>%
     dplyr::group_by(Folio,Pais,Canal,Tienda_Registro,clase) %>%
@@ -395,9 +373,7 @@ graf1 <- function(base,filtro){
   return(grafica)
 }
 
-graf2 <- function(base,filtro){
-  base <- filtro(base,filtro)
-  
+graf2 <- function(base){
   x<-as.data.frame(prop.table(table(base$Sexo,base$clase),2))
   y<-as.data.frame(prop.table(table(base$Sexo)))
   y$Var2<-"General"
@@ -409,9 +385,8 @@ graf2 <- function(base,filtro){
               angulo=90,x_lab="Género")
 }
 
-graf3 <- function(base,filtro){
-  base <- filtro(base,filtro)
-  
+graf3 <- function(base){
+
   x<-as.data.frame(prop.table(table(base$Edocivil,base$clase),2))
   y<-as.data.frame(prop.table(table(base$Edocivil)))
   y$Var2<-"General"
@@ -422,8 +397,7 @@ graf3 <- function(base,filtro){
               angulo=90,x_lab="Estado Civil") 
 }
 
-graf4 <- function(base,filtro){
-  base <- filtro(base,filtro)
+graf4 <- function(base){
   x<-as.data.frame(prop.table(table(base$Edad_C,base$clase),2))
   y<-as.data.frame(prop.table(table(base$Edad_C)))
   y$Var2<-"General"
@@ -435,9 +409,8 @@ graf4 <- function(base,filtro){
               angulo=90,x_lab="Edad")
 }
 
-graf5 <- function(base,filtro){
-  base <- filtro(base,filtro)
-  
+graf5 <- function(base){
+
   ingreso <- base %>%
     filter(Ingreso_C!="Cero")
   
@@ -452,8 +425,7 @@ graf5 <- function(base,filtro){
               var_facet="clase", angulo=90,x_lab="Ingreso Mensual")
 }
 
-graf6 <- function(base,filtro){
-  base <- filtro(base,filtro)
+graf6 <- function(base){
   edades_anio2<-base %>%
     group_by(clase,anio_llegada,edad_llegada.C)%>%
     summarise(conteo=n()) %>%
@@ -482,8 +454,7 @@ graf6 <- function(base,filtro){
     ggtitle("Ingreso de personas por edad y año")
 }
 
-graf7 <- function(base,filtro){
-  base <- filtro(base,filtro)
+graf7 <- function(base){
   x<-as.data.frame(prop.table(table(base$Saldados_C,base$clase),2))
   y<-as.data.frame(prop.table(table(base$Saldados_C)))
   y$Var2<-"General"
@@ -495,8 +466,7 @@ graf7 <- function(base,filtro){
               var_facet="clase", angulo=90,x_lab="Pedidos Saldados")
 }
 
-graf8 <- function(base,filtro){
-  base <- filtro(base,filtro)
+graf8 <- function(base){
   x<-as.data.frame(prop.table(table(base$Activos_C,base$clase),2))
   y<-as.data.frame(prop.table(table(base$Activos_C)))
   y$Var2<-"General"
@@ -508,8 +478,7 @@ graf8 <- function(base,filtro){
               var_facet="clase", angulo=90,x_lab="Pedidos Activos")
 }
 
-graf9 <- function(base,filtro){
-  base <- filtro(base,filtro)
+graf9 <- function(base){
   x<-as.data.frame(prop.table(table(base$Atrasos_C,base$clase),2))
   y<-as.data.frame(prop.table(table(base$Atrasos_C)))
   y$Var2<-"General"
@@ -521,8 +490,7 @@ graf9 <- function(base,filtro){
               var_facet="clase", angulo=90,x_lab="Atrasos")
 }
 
-graf10 <- function(base,filtro){
-  base <- filtro(base,filtro)
+graf10 <- function(base){
   x<-as.data.frame(prop.table(table(base$Cancelados_C,base$clase),2))
   y<-as.data.frame(prop.table(table(base$Cancelados_C)))
   y$Var2<-"General"
@@ -534,7 +502,7 @@ graf10 <- function(base,filtro){
               var_facet="clase", angulo=90,x_lab="Cancelados")
 }
 
-graf11 <- function(base,filtro){
+graf11 <- function(base){
   x<-as.data.frame(prop.table(table(base$anios_primercompra_C,base$clase),2))
   y<-as.data.frame(prop.table(table(base$anios_primercompra_C)))
   y$Var2<-"General"
@@ -546,7 +514,7 @@ graf11 <- function(base,filtro){
               var_facet="clase", angulo=90,x_lab="Meses desde 1C")
 }
 
-graf12 <- function(base,filtro){
+graf12 <- function(base){
   x<-as.data.frame(prop.table(table(base$meses_ultimacompra,base$clase),2))
   y<-as.data.frame(prop.table(table(base$meses_ultimacompra)))
   y$Var2<-"General"
@@ -558,20 +526,20 @@ graf12 <- function(base,filtro){
               var_facet="clase", angulo=90,x_lab="Meses desde UC")
 }
 
-graf13 <- function(base,filtro){
-  base <- filtro(base,filtro)
+graf13 <- function(base){
+   base<- base %>%
+    mutate(anio_compra=year(Fec_surt),
+           semana_compra=week(Fec_surt)) %>%
+    filter(anio_compra>1980 & anio_compra<2015)
+  
   ggplot(base,aes(x=semana_compra)) +
-    geom_density(fill="turquoise4",colour="black") +
-    theme(axis.text.x  = element_text(angle=90),
-          panel.background=element_rect(fill='snow2'),
-          strip.background=element_rect(fill='skyblue4'),
-          strip.text.x = element_text(colour = "white",size=15),
-          text = element_text(size=20)) +
+    geom_density(fill="#2c3e50",colour="black") +
+    theme_MH() +
     scale_y_continuous(labels=percent) +
     scale_x_continuous(breaks=seq(0,53,by=10),limits=c(0,53)) +
     facet_grid(clase~anio_compra) +
     xlab("Semana") + 
-    ylab("") +
-    ggtitle("Distribución de compras por grupo y año")
+    ylab("")
+
 }
 
