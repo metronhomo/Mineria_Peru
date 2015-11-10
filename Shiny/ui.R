@@ -2,13 +2,36 @@ library(shiny)
 library(shinythemes)
 
 shinyUI(navbarPage("Minería de datos Perú",theme = shinytheme("flatly"),
-                   tabPanel("Gráfica de correlaciones",
+                   tabPanel("Análisis Previo",
                             sidebarLayout(
                               sidebarPanel(
-                                menu1(),
+                                conditionalPanel(
+                                  condition = "input.panel1  != 'Ingreso de Personas por Edad y Año'",
+                                  menu1()
+                                ),
                                 width = 2),
                               mainPanel(
-                                plotOutput("graf_correlaciones",height=100,width=1300)
+                                tabsetPanel(id="panel1",
+                                  tabPanel("Ingreso de Personas por Edad y Año",
+                                           column(5,plotOutput("edad_anio",height=100,width=1300)),align="center"),
+                                  tabPanel("Interacción entre variables",
+                                           column(5,plotOutput("graf_correlaciones",height=100,width=1300)),align="center"),
+                                  tabPanel("Análisis de Estructura",
+                                    column(5, align="center",
+                                           conditionalPanel(
+                                             condition = "input.filtroAnio1  == '2008'",
+                                             imageOutput("im1")
+                                           ),
+                                           conditionalPanel(
+                                             condition = "input.filtroAnio1  == '2008 - 2011'",
+                                             imageOutput("im2")
+                                           ),
+                                           conditionalPanel(
+                                             condition = "input.filtroAnio1  == '2012 - 2015'",
+                                             imageOutput("im3")
+                                           ))
+                                  )
+                                )
                               )
                             )
                    ),
@@ -21,13 +44,13 @@ shinyUI(navbarPage("Minería de datos Perú",theme = shinytheme("flatly"),
                                 tabsetPanel(
                                   tabPanel("Distribución de personas, productos y gasto",
                                            column(5,plotOutput("personas_productos_gasto",height=100,width=1300)),align="center"),
-                                  tabPanel("Distribución de género",
+                                  tabPanel("Género",
                                            column(5,plotOutput("genero",height=100,width=1300)),align="center"),
-                                  tabPanel("Distribución de estado civil",
+                                  tabPanel("Estado civil",
                                            column(5,plotOutput("edo_civil",height=100,width=1300)),align="center"),
-                                  tabPanel("Distribución de edad",
+                                  tabPanel("Edad",
                                            column(5,plotOutput("edad",height=100,width=1300)),align="center"),
-                                  tabPanel("Distribución de ingreso mensual",
+                                  tabPanel("Ingreso mensual",
                                            column(5,plotOutput("ing_mensual",height=100,width=1300)),align="center")
                                 )
                               )
@@ -41,25 +64,24 @@ shinyUI(navbarPage("Minería de datos Perú",theme = shinytheme("flatly"),
                                 width = 2),    
                               mainPanel(
                                 tabsetPanel(
-                                  tabPanel("Distribución de pedidos saldados",
+                                  tabPanel("Pedidos saldados",
                                            column(5,plotOutput("ped_saldados",height=100,width=1300)),align="center"),
-                                  tabPanel("Distribución de número de pedidos activos",
+                                  tabPanel("Pedidos activos",
                                            column(5,plotOutput("ped_activos",height=100,width=1300)),align="center"),
-                                  tabPanel("Distribución de pedidos y atrasos",
+                                  tabPanel("Atrasos",
                                            column(5,plotOutput("atrasos",height=100,width=1300)),align="center"),
-                                  tabPanel("Distribución de pedidos cancelados",
+                                  tabPanel("Pedidos cancelados",
                                            column(5,plotOutput("ped_cancelados",height=100,width=1300)),align="center"),
-                                  tabPanel("Distribución de años desde la primera compra",
+                                  tabPanel("Años desde la primera compra",
                                            column(5,plotOutput("anios_1C",height=100,width=1300)),align="center"),
-                                  tabPanel("Distribución de meses desde la última compra",
+                                  tabPanel("Meses desde la última compra",
                                            column(5,plotOutput("anios_UC",height=100,width=1300)),align="center"),
-                                  tabPanel("Distribución de compras por semana",
+                                  tabPanel("Compras por semana",
                                            column(5,plotOutput("compras_anio_gpo",height=100,width=1300)),align="center")
                                 )
                                 
                               )
                                 )
-
                    )
 #                    tabPanel("Cruce de variables",
 #                             sidebarLayout(

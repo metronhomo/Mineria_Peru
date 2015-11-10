@@ -329,19 +329,6 @@ graficas2<-function(i){
   
 }
 
-filtro <- function(fl){
-  if (fl == '2008'){
-    df <-base_a_2008
-  }else{
-    if (fl == '2008 - 2011'){
-      df <-base_2008_2011
-    }else{
-      df <-base_2012_2015
-      }
-  }
-  return(df)
-}
-
 graf1 <- function(base){
   
   personas <- base %>%
@@ -426,32 +413,20 @@ graf5 <- function(base){
 }
 
 graf6 <- function(base){
-  edades_anio2<-base %>%
-    group_by(clase,anio_llegada,edad_llegada.C)%>%
+  edades_anio<-base %>%
+    group_by(anio_llegada,edad_llegada.C)%>%
     summarise(conteo=n()) %>%
     mutate(p_conteo=conteo/sum(conteo))%>%
     filter(edad_llegada.C!="1 a 17")
   
-  ggplot(edades_anio2,aes(x=anio_llegada,y=p_conteo,group=factor(edad_llegada.C),
-                          colour=factor(edad_llegada.C))) + 
+  ggplot(edades_anio,aes(x=anio_llegada,y=p_conteo,group=factor(edad_llegada.C),
+                         colour=factor(edad_llegada.C))) + 
     geom_smooth(alpha=.4) +
     scale_x_continuous(breaks = seq(2000,2015, by = 1)) +
     scale_y_continuous(labels=percent) +
-    theme(axis.text=element_text(size=14),
-          legend.title = element_text(size=14),
-          legend.text = element_text(size = 14),
-          axis.text.x  = element_text(angle=90),
-          axis.text.x  = element_text(angle=90),
-          text=element_text(size=20),
-          panel.background=element_rect(fill='snow2'),
-          strip.background=element_rect(fill='skyblue4'),
-          strip.text.x = element_text(colour = "white",size=15)) +
+    theme_MH() +
     guides(col=guide_legend(title.hjust =0.5)) +
-    scale_color_discrete(name="Edad") +
-    facet_wrap(~clase,ncol=5) +
-    xlab("Año") + 
-    ylab("Porcentaje de Ingreso") +
-    ggtitle("Ingreso de personas por edad y año")
+    scale_color_discrete(name="Edad")
 }
 
 graf7 <- function(base){
@@ -536,10 +511,9 @@ graf13 <- function(base){
     geom_density(fill="#2c3e50",colour="black") +
     theme_MH() +
     scale_y_continuous(labels=percent) +
-    scale_x_continuous(breaks=seq(0,53,by=10),limits=c(0,53)) +
+    scale_x_continuous(breaks=seq(0,53,by=20),limits=c(0,53)) +
     facet_grid(clase~anio_compra) +
     xlab("Semana") + 
     ylab("")
-
 }
 

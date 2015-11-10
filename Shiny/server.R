@@ -40,6 +40,12 @@ shinyServer(function(input, output,session){
     return(a)
   })
   
+  output$edad_anio <- renderPlot({
+    graf6(caracterizacion)},
+    height = 1000,
+    width = 1300
+  )
+  
   output$personas_productos_gasto <- renderPlot({
     graf1(data_grafs_barras())},
     height = 1000,
@@ -66,12 +72,6 @@ shinyServer(function(input, output,session){
   
   output$ing_mensual <- renderPlot({
     graf5(data_grafs_barras())},
-    height = 1000,
-    width = 1300
-  )
-  
-  output$edad_anio_llegada <- renderPlot({
-    graf6(data_grafs_barras())},
     height = 1000,
     width = 1300
   )
@@ -117,5 +117,32 @@ shinyServer(function(input, output,session){
     height = 1000,
     width = 1300
   )
+  
+  output$im1 <- renderImage({
+    list(src="images/i1.png",
+         filetype='image/png',
+         width=1300,
+         height=1000,
+         alt='wiiiii')
+  }, 
+  deleteFile = F)
+  
+  output$im2 <- renderImage({
+    list(src="images/i2.png",
+         filetype='image/png',
+         width=1300,
+         height=1000,
+         alt='wiiiii')
+  }, 
+  deleteFile = F)
+  
+  output$im3 <- renderImage({
+    list(src="images/i3.png",
+         filetype='image/png',
+         width=1300,
+         height=1000,
+         alt='wiiiii')
+  }, 
+  deleteFile = F)
   
 })
