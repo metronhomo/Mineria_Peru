@@ -70,20 +70,90 @@ menu4 <- function(){
         '2008 - 2011' = '2008 - 2011',
         '2012 - 2015' = '2012 - 2015'),
       selected = c('2008')),
-    helpText(h4('Selecciona los años que quieres ver.')),
+    br(),
+    helpText(h4('Selecciona las variables que quieres cruzar.')),
     selectInput(
       'var_cruce_1', 
       label = '',
       choices = list(
-        'Estado Civil'),
-      selected = c('Estado Civil')),
-    helpText(h4('Selecciona los años que quieres ver.')),
+        #"Mercancias_P",
+        #"Motos_P",
+        #"Telycomp_P",
+        #"Personales_P",
+        #"TAZ_P",
+        "Sexo",
+        "Edocivil",
+        "Edad_C",
+        "Ingreso_C",
+        "Dependientes_C",
+        "Saldados_C",
+        "Activos_C",
+        "Dificil_Cobro_C",
+        "Atrasos_C",
+        "Cancelados_C",
+        #"meses_ultimacompra",
+        "anios_primercompra_C",
+        "Saldo_C",
+        #"anio_llegada",
+        "edad_llegada.C",
+        #"Fec_surt",
+        #"Mercancias_SC",
+        #"Motos_SC",
+        #"Telycomp_SC",
+        #"Personales_SC",
+        #"TAZ_SC",
+        #"Depto",
+        #"Subdepto",
+        #"Clase",
+        #"Subclase",
+        "Depto_Desc"
+        #"Subdepto_Desc",
+        #"Clase_Desc",
+        #"Subclase_Desc",
+        #"ITV"
+        ),
+      selected = c('Sexo')),
     selectInput(
       'var_cruce_2', 
       label = '',
       choices = list(
-        'Estado Civil'),
-      selected = c('Estado Civil'))
+        #"Mercancias_P",
+        #"Motos_P",
+        #"Telycomp_P",
+        #"Personales_P",
+        #"TAZ_P",
+        "Sexo",
+        "Edocivil",
+        "Edad_C",
+        "Ingreso_C",
+        "Dependientes_C",
+        "Saldados_C",
+        "Activos_C",
+        "Dificil_Cobro_C",
+        "Atrasos_C",
+        "Cancelados_C",
+        #"meses_ultimacompra",
+        "anios_primercompra_C",
+        "Saldo_C",
+        #"anio_llegada",
+        "edad_llegada.C",
+        #"Fec_surt",
+        #"Mercancias_SC",
+        #"Motos_SC",
+        #"Telycomp_SC",
+        #"Personales_SC",
+        #"TAZ_SC",
+        #"Depto",
+        #"Subdepto",
+        #"Clase",
+        #"Subclase",
+        "Depto_Desc"
+        #"Subdepto_Desc",
+        #"Clase_Desc",
+        #"Subclase_Desc",
+        #"ITV"
+      ),
+      selected = c('Edocivil'))
     # )
   )}
 
@@ -376,6 +446,22 @@ filtro <- function(base,filtro){
         mutate(anio_llegada=as.integer(as.character(anio_llegada))) %>%
         filter(anio_llegada>2011)
       }
+  }
+  return(df)
+}
+
+filtro2 <- function(base,filtro){
+  if (filtro == '2008'){
+    df <-base %>%
+      filter(anio_llegada<2008)
+  }else{
+    if (filtro == '2008 - 2011'){
+      df <-base %>%
+        filter(anio_llegada>=2008 & anio_llegada<=2011)
+    }else{
+      df <-base %>%
+        filter(anio_llegada>2011)
+    }
   }
   return(df)
 }
