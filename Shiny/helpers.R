@@ -21,11 +21,26 @@ menu1 <- function(){
         'filtroAnio1', 
         label = '',
         choices = list(
-          '2008' = '2008',
+          'Antes de 2008' = '2008',
           '2008 - 2011' = '2008 - 2011',
           '2012 - 2015' = '2012 - 2015'),
         selected = c('2008'))
    # )
+    )}
+
+menu_im <- function(){
+  #fluidPage(
+  wellPanel(
+    helpText(h4('Selecciona los años que quieres ver.')),
+    radioButtons(
+      'filtroAnio_im', 
+      label = '',
+      choices = list(
+        'Antes de 2008' = '2008',
+        '2008 - 2011' = '2008 - 2011',
+        '2012 - 2015' = '2012 - 2015'),
+      selected = c('2008'))
+    # )
   )}
 
 menu2 <- function(){
@@ -36,7 +51,7 @@ menu2 <- function(){
       'filtroAnio2', 
       label = '',
       choices = list(
-        '2008' = '2008',
+        'Antes de 2008' = '2008',
         '2008 - 2011' = '2008 - 2011',
         '2012 - 2015' = '2012 - 2015'),
       selected = c('2008'))
@@ -51,7 +66,7 @@ menu3 <- function(){
       'filtroAnio3', 
       label = '',
       choices = list(
-        '2008' = '2008',
+        'Antes de 2008' = '2008',
         '2008 - 2011' = '2008 - 2011',
         '2012 - 2015' = '2012 - 2015'),
       selected = c('2008'))
@@ -66,7 +81,7 @@ menu4 <- function(){
       'filtroAnio4', 
       label = '',
       choices = list(
-        '2008' = '2008',
+        'Antes de 2008' = '2008',
         '2008 - 2011' = '2008 - 2011',
         '2012 - 2015' = '2012 - 2015'),
       selected = c('2008'))
@@ -81,7 +96,7 @@ menu5 <- function(){
       'filtroAnio5', 
       label = '',
       choices = list(
-        '2008' = '2008',
+        'Antes de 2008' = '2008',
         '2008 - 2011' = '2008 - 2011',
         '2012 - 2015' = '2012 - 2015'),
       selected = c('2008'))

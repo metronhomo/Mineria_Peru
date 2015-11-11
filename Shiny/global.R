@@ -3,6 +3,8 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(scales)
+library(gridExtra)
+library(lubridate)
 
 # Base_Peru_con_Grupos_y_Catalogo_sin_LINEA_CREDITO <- readRDS("./data/Base_Peru_con_Grupos_y_Catalogo_sin_LINEA_CREDITO.RDS")
 #Base_Red_Corregida_sin_LINEA_CREDITO <- readRDS("./data/Base_Red_Corregida_sin_LINEA_CREDITO.RDS")
