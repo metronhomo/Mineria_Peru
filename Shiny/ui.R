@@ -1,74 +1,98 @@
-#ui.R
-
 library(shiny)
 library(shinythemes)
 
 shinyUI(navbarPage("Minería de datos Perú",theme = shinytheme("flatly"),
-                   tabPanel("Gráfica de correlaciones",
+                   tabPanel("Análisis Previo",
                             sidebarLayout(
                               sidebarPanel(
-                                menu1(),
+                                conditionalPanel(
+                                  condition = "input.panel1  == 'Interacción entre variables'",
+                                  menu1(),
+                                  helpText("En esta gráfica estamos viendo bli bli bli bla bla bla 1")
+                                ),
+                                conditionalPanel(
+                                  condition = "input.panel1  == 'Análisis de Estructura'",
+                                  menu1(),
+                                  helpText("En esta gráfica estamos viendo bli bli bli bla bla bla 2")
+                                ),
+                                conditionalPanel(
+                                  condition = "input.panel1  == 'Ingreso de Personas por Edad y Año'",
+                                  helpText("En esta gráfica estamos viendo bli bli bli bla bla bla")
+                                ),
                                 width = 2),
                               mainPanel(
-                                plotOutput("graf_correlaciones",height=100,width=1300)
+                                tabsetPanel(id="panel1",
+                                  tabPanel("Ingreso de Personas por Edad y Año",
+                                           column(5,plotOutput("edad_anio",height=100,width=1300)),align="center"),
+                                  tabPanel("Interacción entre variables",
+                                           column(5,plotOutput("graf_correlaciones",height=100,width=1300)),align="center"),
+                                  tabPanel("Análisis de Estructura",
+                                    column(5, align="center",
+                                           conditionalPanel(
+                                             condition = "input.filtroAnio1  == '2008'",
+                                             imageOutput("im1")
+                                           ),
+                                           conditionalPanel(
+                                             condition = "input.filtroAnio1  == '2008 - 2011'",
+                                             imageOutput("im2")
+                                           ),
+                                           conditionalPanel(
+                                             condition = "input.filtroAnio1  == '2012 - 2015'",
+                                             imageOutput("im3")
+                                           ))
+                                  )
+                                )
                               )
                             )
                    ),
                    tabPanel("Composición demográfica de grupos",
                             sidebarLayout(
                               sidebarPanel(
-                                conditionalPanel(
-                                  condition = "",
-                                  menu2()),
-                                width = 2
-                              ),    
+                                  menu2(),
+                                width = 2),    
                               mainPanel(
                                 tabsetPanel(
-                                  tabPanel("Porcentaje de personas en cada grupo",
-                                           column(5,plotOutput("plot1",height=100,width=1300)),align="center"),
                                   tabPanel("Distribución de personas, productos y gasto",
-                                           column(5,plotOutput("plot2",height=100,width=1300)),align="center"),
-                                  tabPanel("Distribución de género",
-                                           column(5,plotOutput("plot3",height=100,width=1300)),align="center"),
-                                  tabPanel("Distribución de estado civil",
-                                           column(5,plotOutput("plot4",height=100,width=1300)),align="center"),
-                                  tabPanel("Distribución de edad",
-                                           column(5,plotOutput("plot5",height=100,width=1300)),align="center"),
-                                  tabPanel("Distribución de ingreso mensual",
-                                           column(5,plotOutput("plot6",height=100,width=1300)),align="center"),
-                                  tabPanel("Ingreso de personas por edad y año",
-                                           column(5,plotOutput("plot7",height=100,width=1300)),align="center"),
-                                  id = "Comp_dem_grupos"
+                                           column(5,plotOutput("personas_productos_gasto",height=100,width=1300)),align="center"),
+                                  tabPanel("Género",
+                                           column(5,plotOutput("genero",height=100,width=1300)),align="center"),
+                                  tabPanel("Estado civil",
+                                           column(5,plotOutput("edo_civil",height=100,width=1300)),align="center"),
+                                  tabPanel("Edad",
+                                           column(5,plotOutput("edad",height=100,width=1300)),align="center"),
+                                  tabPanel("Ingreso mensual",
+                                           column(5,plotOutput("ing_mensual",height=100,width=1300)),align="center")
                                 )
                               )
                               
                             )
                    ),
-                   #                    tabPanel("Comportamiento de compra por grupo",
-                   #                             sidebarLayout(
-                   #                               sidebarPanel(
-                   #                                 menu3(),
-                   #                                 width = 2
-                   #                               ),    
-                   #                               mainPanel(
-                   #                                   tabPanel("Distribución de pedidos saldados",
-                   #                                            column(5,plotOutput("plot",height=100,width=1300)),align="center"),
-                   #                                   tabPanel("Distribución de número de pedidos activos",
-                   #                                            column(5,plotOutput("plot",height=100,width=1300)),align="center"),
-                   #                                   tabPanel("Distribución de pedidos y atrasos",
-                   #                                            column(5,plotOutput("plot",height=100,width=1300)),align="center"),
-                   #                                   tabPanel("Distribución de pedidos cancelados",
-                   #                                            column(5,plotOutput("plot",height=100,width=1300)),align="center"),
-                   #                                   tabPanel("Distribución de años desde la primera compra",
-                   #                                            column(5,plotOutput("plot",height=100,width=1300)),align="center"),
-                   #                                   tabPanel("Distribución de meses desde la última compra",
-                   #                                            column(5,plotOutput("plot",height=100,width=1300)),align="center"),
-                   #                                   tabPanel("Distribución de compras por semana",
-                   #                                            column(5,plotOutput("plot",height=100,width=1300)),align="center")
-                   #                                 )
-                   #                                 
-                   #                               )
-                   #                    ),
+                   tabPanel("Comportamiento de compra por grupo",
+                            sidebarLayout(
+                              sidebarPanel(
+                                menu3(),
+                                width = 2),    
+                              mainPanel(
+                                tabsetPanel(
+                                  tabPanel("Pedidos saldados",
+                                           column(5,plotOutput("ped_saldados",height=100,width=1300)),align="center"),
+                                  tabPanel("Pedidos activos",
+                                           column(5,plotOutput("ped_activos",height=100,width=1300)),align="center"),
+                                  tabPanel("Atrasos",
+                                           column(5,plotOutput("atrasos",height=100,width=1300)),align="center"),
+                                  tabPanel("Pedidos cancelados",
+                                           column(5,plotOutput("ped_cancelados",height=100,width=1300)),align="center"),
+                                  tabPanel("Años desde la primera compra",
+                                           column(5,plotOutput("anios_1C",height=100,width=1300)),align="center"),
+                                  tabPanel("Meses desde la última compra",
+                                           column(5,plotOutput("anios_UC",height=100,width=1300)),align="center"),
+                                  tabPanel("Compras por semana",
+                                           column(5,plotOutput("compras_anio_gpo",height=100,width=1300)),align="center")
+                                )
+                                
+                              )
+                                )
+                   ),
                    tabPanel("Cruce de variables",
                             sidebarLayout(
                               sidebarPanel(
@@ -76,30 +100,31 @@ shinyUI(navbarPage("Minería de datos Perú",theme = shinytheme("flatly"),
                                 width = 2
                               ),    
                               mainPanel(
-                                tabsetPanel(
-                                  tabPanel("Algo",
-                                           column(5,plotOutput("graf_cruces",height=100,width=1300)),align="center")
-                                )
+#                                 tabsetPanel(
+#                                   tabPanel("Algo",
+#                                            column(5,plotOutput("graf_cruces",height=100,width=1300)),align="center")
+#                                 )
+                                column(5,plotOutput("graf_cruces",height=100,width=1300))
                                 
                               )
                             )
                    )
-                   #                    tabPanel("Pedidos",
-                   #                             sidebarLayout(
-                   #                               sidebarPanel(
-                   #                                 menu5(),
-                   #                                 width = 2
-                   #                               ),    
-                   #                               mainPanel(
-                   #                                 tabsetPanel(
-                   #                                   tabPanel("Gasto acumulado por grupo",
-                   #                                            column(5,plotOutput("plot",height=100,width=1300)),align="center"),
-                   #                                   tabPanel("Gasto por sublíneas por grupo",
-                   #                                            column(5,plotOutput("plot",height=100,width=1300)),align="center")
-                   #                                 )
-                   #                                 
-                   #                               )
-                   #                             )
-                   #                    )
+#                    tabPanel("Pedidos",
+#                             sidebarLayout(
+#                               sidebarPanel(
+#                                 menu5(),
+#                                 width = 2
+#                               ),    
+#                               mainPanel(
+#                                 tabsetPanel(
+#                                   tabPanel("Gasto acumulado por grupo",
+#                                            column(5,plotOutput("plot",height=100,width=1300)),align="center"),
+#                                   tabPanel("Gasto por sublíneas por grupo",
+#                                            column(5,plotOutput("plot",height=100,width=1300)),align="center")
+#                                 )
+#                                 
+#                               )
+#                             )
+#                    )
                    
 ))
