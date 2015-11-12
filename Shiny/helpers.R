@@ -1,16 +1,17 @@
 theme_MH <- function() {
   theme(
-      axis.text.x=element_text(angle=90,size=22, colour = 'black'),
-      axis.text.y=element_text(size=22, colour = 'black'),
-      panel.background=element_rect(fill='grey95'),
-      strip.background=element_rect(fill="#2c3e50"),
-      panel.border = element_rect(colour = "#2c3e50", fill=NA, size=1),
-      strip.text.x = element_text(colour = 'white', size = 22),
-      legend.text=element_text(size=24),
-      legend.title=element_blank(),
-      panel.grid.major = element_line(colour = 'grey70', linetype = 'dashed'),
-      panel.grid.minor = element_line(colour = 'grey70', linetype = 'dashed'))
-  }
+    axis.text.x=element_text(angle=90,size=22, colour = 'black'),
+    axis.text.y=element_text(size=22, colour = 'black'),
+    panel.background=element_rect(fill='grey95'),
+    strip.background=element_rect(fill="#2c3e50"),
+    panel.border = element_rect(colour = "#2c3e50", fill=NA, size=1),
+    strip.text.x = element_text(colour = 'white', size = 22),
+    strip.text.y = element_text(colour = 'white', size = 22),
+    legend.text=element_text(size=24),
+    legend.title=element_blank(),
+    panel.grid.major = element_line(colour = 'grey70', linetype = 'dashed'),
+    panel.grid.minor = element_line(colour = 'grey70', linetype = 'dashed'))
+}
 
 
 menu1 <- function(){
@@ -34,6 +35,22 @@ menu_im <- function(){
     helpText(h4('Selecciona los años que quieres ver.')),
     radioButtons(
       'filtroAnio_im', 
+      label = '',
+      choices = list(
+        'Antes de 2008' = '2008',
+        '2008 - 2011' = '2008 - 2011',
+        '2012 - 2015' = '2012 - 2015'),
+      selected = c('2008'))
+    # )
+  )}
+
+
+menu_g <- function(){
+  #fluidPage(
+  wellPanel(
+    helpText(h4('Selecciona los años que quieres ver.')),
+    radioButtons(
+      'filtroAnio_g', 
       label = '',
       choices = list(
         'Antes de 2008' = '2008',
@@ -72,7 +89,6 @@ menu3 <- function(){
       selected = c('2008'))
     # )
   )}
-
 menu4 <- function(){
   #fluidPage(
   wellPanel(
@@ -81,10 +97,22 @@ menu4 <- function(){
       'filtroAnio4', 
       label = '',
       choices = list(
-        'Antes de 2008' = '2008',
+        '2008' = '2008',
         '2008 - 2011' = '2008 - 2011',
         '2012 - 2015' = '2012 - 2015'),
-      selected = c('2008'))
+      selected = c('2008')),
+    br(),
+    helpText(h4('Selecciona las variables que quieres cruzar.')),
+    selectInput(
+      'var_cruce_1', 
+      label = '',
+      choices = choices_menu4,
+      selected = c('Sexo')),
+    selectInput(
+      'var_cruce_2', 
+      label = '',
+      choices = choices_menu4,
+      selected = c('Edocivil'))
     # )
   )}
 
@@ -134,6 +162,114 @@ graf_barras<-function(df,var_x,var_y,titulo="",facet=F,var_facet="",
       geom_bar(stat="identity",fill="#2c3e50",colour="black") +
       geom_text(aes(y=var_y + .03,label=round(var_y*100)),colour='black',size=6) +
       theme_MH() +
+      facet_wrap(~var_facet,ncol=n) +
+      scale_y_continuous(labels=label)  +
+      ylab("") +
+      xlab("")
+  }
+}
+
+graf_g1<-function(df,var_x,var_y,titulo="",facet=F,var_facet="",
+                      angulo=0,label=percent,x_lab="",y_lab="",n=1){  
+  if(!facet){
+    
+    df<- df %>%
+      dplyr::select(one_of(var_x,var_y))
+    names(df)<-c("var_x","var_y")
+    
+    ggplot(df,aes(x=var_x,y=var_y)) +
+      geom_bar(stat="identity",fill="#2c3e50",colour="black") +
+      geom_text(aes(y=var_y + .03,label=round(var_y*100)),colour='black',size=6) +
+      theme(
+        axis.text.x=element_blank(),
+        axis.text.y=element_text(size=22, colour = 'black'),
+        panel.background=element_rect(fill='grey95'),
+        strip.background=element_rect(fill="#2c3e50"),
+        panel.border = element_rect(colour = "#2c3e50", fill=NA, size=1),
+        strip.text.x = element_text(colour = 'white', size = 22),
+        strip.text.y = element_text(colour = 'white', size = 22),
+        legend.text=element_text(size=24),
+        legend.title=element_blank(),
+        panel.grid.major = element_line(colour = 'grey70', linetype = 'dashed'),
+        panel.grid.minor = element_line(colour = 'grey70', linetype = 'dashed')) +
+      scale_y_continuous(labels=label)  +
+      ylab("") +
+      xlab("")
+  }else{    
+    df<- df %>%
+      dplyr::select(one_of(var_x,var_y,var_facet))
+    names(df)<-c("var_x","var_y","var_facet")
+    
+    ggplot(df,aes(x=var_x,y=var_y)) +
+      geom_bar(stat="identity",fill="#2c3e50",colour="black") +
+      geom_text(aes(y=var_y + .03,label=round(var_y*100)),colour='black',size=6) +
+      theme(
+        axis.text.x=element_blank(),
+        axis.text.y=element_text(size=22, colour = 'black'),
+        panel.background=element_rect(fill='grey95'),
+        strip.background=element_rect(fill="#2c3e50"),
+        panel.border = element_rect(colour = "#2c3e50", fill=NA, size=1),
+        strip.text.x = element_text(colour = 'white', size = 22),
+        strip.text.y = element_text(colour = 'white', size = 22),
+        legend.text=element_text(size=24),
+        legend.title=element_blank(),
+        panel.grid.major = element_line(colour = 'grey70', linetype = 'dashed'),
+        panel.grid.minor = element_line(colour = 'grey70', linetype = 'dashed')) +
+      scale_y_continuous(labels=label)  +
+      facet_wrap(~var_facet,ncol=n) +
+      scale_y_continuous(labels=label)  +
+      ylab("") +
+      xlab("")
+  }
+}
+
+graf_g2<-function(df,var_x,var_y,titulo="",facet=F,var_facet="",
+                  angulo=0,label=percent,x_lab="",y_lab="",n=1){  
+  if(!facet){
+    
+    df<- df %>%
+      dplyr::select(one_of(var_x,var_y))
+    names(df)<-c("var_x","var_y")
+    
+    ggplot(df,aes(x=var_x,y=var_y)) +
+      geom_bar(stat="identity",fill="#2c3e50",colour="black") +
+      geom_text(aes(y=var_y + .03,label=round(var_y*100)),colour='black',size=6) +
+      theme(
+        axis.text.x=element_text(size=18, colour = 'black'),
+        axis.text.y=element_text(size=22, colour = 'black'),
+        panel.background=element_rect(fill='grey95'),
+        strip.background=element_rect(fill="#2c3e50"),
+        panel.border = element_rect(colour = "#2c3e50", fill=NA, size=1),
+        strip.text.x = element_text(colour = 'white', size = 22),
+        strip.text.y = element_text(colour = 'white', size = 22),
+        legend.text=element_text(size=24),
+        legend.title=element_blank(),
+        panel.grid.major = element_line(colour = 'grey70', linetype = 'dashed'),
+        panel.grid.minor = element_line(colour = 'grey70', linetype = 'dashed')) +
+      scale_y_continuous(labels=label)  +
+      ylab("") +
+      xlab("")
+  }else{    
+    df<- df %>%
+      dplyr::select(one_of(var_x,var_y,var_facet))
+    names(df)<-c("var_x","var_y","var_facet")
+    
+    ggplot(df,aes(x=var_x,y=var_y)) +
+      geom_bar(stat="identity",fill="#2c3e50",colour="black") +
+      geom_text(aes(y=var_y + .03,label=round(var_y*100)),colour='black',size=6) +
+      theme(
+        axis.text.x=element_blank(),
+        axis.text.y=element_text(size=22, colour = 'black'),
+        panel.background=element_rect(fill='grey95'),
+        strip.background=element_rect(fill="#2c3e50"),
+        panel.border = element_rect(colour = "#2c3e50", fill=NA, size=1),
+        strip.text.x = element_text(colour = 'white', size = 22),
+        strip.text.y = element_text(colour = 'white', size = 22),
+        legend.text=element_text(size=24),
+        legend.title=element_blank(),
+        panel.grid.major = element_line(colour = 'grey70', linetype = 'dashed'),
+        panel.grid.minor = element_line(colour = 'grey70', linetype = 'dashed')) +
+      scale_y_continuous(labels=label)  +
       facet_wrap(~var_facet,ncol=n) +
       scale_y_continuous(labels=label)  +
       ylab("") +
@@ -363,11 +499,11 @@ graf1 <- function(base){
     dplyr::summarise(productos = sum(Mercancias_P,Motos_P,Telycomp_P,Personales_P,TAZ_P)) %>%
     dplyr::mutate(porc_productos=productos/sum(productos))
   
-  people<-graf_barras(df=personas,var_x="clase",var_y="porc_personas",
+  people<-graf_g1(df=personas,var_x="clase",var_y="porc_personas",
                       titulo="Distribución de personas vista por grupo",x_lab="Grupo")
-  products<-graf_barras(df=productos,var_x="clase",var_y="porc_productos",
+  products<-graf_g1(df=productos,var_x="clase",var_y="porc_productos",
                         titulo="Distribución de productos vista por grupo",x_lab="Grupo")
-  money<-graf_barras(df=dinero,var_x="clase",var_y="porc_dinero",
+  money<-graf_g2(df=dinero,var_x="clase",var_y="porc_dinero",
                      titulo="Distribución del gasto vista por grupo",x_lab="Grupo")
   
   grafica<-grid.arrange(people,products,money,ncol=1)
@@ -441,7 +577,8 @@ graf6 <- function(base){
     scale_y_continuous(labels=percent) +
     theme_MH() +
     guides(col=guide_legend(title.hjust =0.5)) +
-    scale_color_discrete(name="Edad")
+    scale_color_discrete(name="Edad") +
+    xlab("") +ylab("")
 }
 
 graf7 <- function(base){
@@ -530,5 +667,125 @@ graf13 <- function(base){
     facet_grid(clase~anio_compra) +
     xlab("Semana") + 
     ylab("")
+}
+
+submenu_5_linea <- function(){
+  #fluidPage(
+  wellPanel(
+    helpText(h4('Selecciona la línea que quieres ver.')),
+    selectInput(
+      'filtroLinea', 
+      label = '',
+      choices = list(
+        "ELECTRÓNICA" = "ELECTRONICA",
+        "LÍNEA BLANCA" = "LINEA BLANCA",
+        "MUEBLES" = "MUEBLES",
+        "SEGUROS AZTECA" = "SEGUROS AZTECA",
+        "SERVICIOS" = "SERVICIOS"
+        #"COLCHONES Y BOXES" = "COLCHONES Y BOXES",
+        #"TELEFONÍA" = "TELEFONIA"
+        #"TRANSPORTE" = "TRANSPORTE",
+        #"CÓMPUTO" = "COMPUTO",
+        #"NUEVOS NEGOCIOS" = "NUEVOS NEGOCIOS",
+        #"MOTOCICLETAS" = "MOTOCICLETAS",
+        #"ENTRETENIMIENTO"
+      ),
+      selected = "SERVICIOS"),
+    radioButtons('total_sublinea', 
+                 label = '',
+                 choices = list(
+                   'Sublíneas',
+                   'Clases'),
+                 selected = 'Sublíneas'
+    )
+  )}
+
+requerimientos<-function(){
+  req<-"LCR –> Status de Línea de Crédito
+
+  Activa                    
+  Otro                      
+  Cancalada                
+  Inactiva por cliente malo
+  
+  porc_cap_pago_usado_C –> Capacidad de Pago usada (%)
+  
+  Cero       
+  1-80       
+  81-100     
+  Más de 100
+  
+  Mercancias_P_C –> Pedidos de Mercancías
+  
+  Ninguno 
+  Uno         
+  Dos         
+  Tres        
+  Cuatro      
+  Cinco       
+  Seis a diez Más de diez
+  
+  Personales_P_C – Pedidos de Préstamos Personales
+  
+  Ninguno     
+  Uno         
+  Dos o tres  
+  Más de tres
+  
+  TAZ_P_C –> Pedidos TAZ
+  
+  Ninguno       
+  Uno o dos     
+  Tres o cuatro 
+  Más de cuatro
+  
+  Activos_C –> Pedidos Activos
+  
+  Ninguno     
+  Uno         
+  Dos o tres  
+  Más de tres
+  
+  Atrasos_C –> Número de Atrasos
+  
+  Ninguno     
+  Uno         
+  Dos o tres  
+  Más de tres
+  
+  Cancelados_C –> Pedidos Cancelados
+  
+  Ninguno     
+  Uno         
+  Dos o tres  
+  Más de tres
+  
+  Saldo_C –> Saldo
+  
+  0-2134       
+  2135-5184    
+  5185-8000    
+  8001-10222   
+  10223-13137  
+  Más de 13137
+  
+  anios_primeracompra_C —> Años desde la primer compra
+  
+  Ninguno       
+  Uno o dos     
+  Tres o cuatro 
+  Cinco o seis  
+  Siete u ocho  
+  Nueve o diez  
+  Más de diez
+  
+  meses_ultimacompra_C
+  
+  Ninguno   
+  1-24     
+  25-48     
+  49-72     
+  73-96     
+  Más de 96"
 }
 

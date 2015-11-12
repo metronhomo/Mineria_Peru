@@ -1,7 +1,7 @@
 library(shiny)
 library(shinythemes)
 
-shinyUI(navbarPage("Minería de datos Perú",theme = shinytheme("flatly"),
+shinyUI(navbarPage("",theme = shinytheme("flatly"),
                    tabPanel("Análisis Previo",
                             sidebarLayout(
                               sidebarPanel(
@@ -82,6 +82,37 @@ shinyUI(navbarPage("Minería de datos Perú",theme = shinytheme("flatly"),
                                 )
                               )
                    ),
+                   tabPanel("Grupos",
+                            sidebarLayout(
+                              sidebarPanel(
+                                fluidRow(
+                                  wellPanel(
+                                    menu_g()
+                                  )),
+                                  fluidRow(wellPanel(
+                                    style = "background-color: #2c3e50;",
+                                    h3('¿Qué significa?',align="center",style = "color:#C2D1E0"),
+                                    br(),
+                                    h4("En esta gráfica podemos ver la composición de cada uno de los grupos en cada una de las variables
+                                       que utilizamos para crear a los mismos.",style = "color:#C2D1E0"),
+                                    br(),
+                                    h4(" En la parte de arriba de cada gráfica podemos ver la proporción de personas que se encuentra en ese grupo;
+                                        cada una de las variables ocupadas son categorías; la altura de la barra indica la proporción de personas
+                                        que se encuentra en esa categoría.",
+                                       style = "color:#C2D1E0"),
+                                    br(),
+                                    h4("En el botón de descarga que se encuentra abajo puedes obtener el layout de las variables ocupadas así como 
+                                       las categorías que conforman a dichas variables.",
+                                       style = "color:#C2D1E0"),
+                                    h3("Descarga el layout",style = "color:#C2D1E0"),
+                                    br(),
+                                    downloadButton('layout','Layout')
+                                    )
+                                    ),
+                                width = 2),
+                              mainPanel(column(5,imageOutput("imagen_grupos")))
+                              )
+                            ),
                    tabPanel("Composición demográfica de grupos",
                             sidebarLayout(
                               sidebarPanel(
@@ -277,5 +308,146 @@ shinyUI(navbarPage("Minería de datos Perú",theme = shinytheme("flatly"),
                                 
                               )
                                 )
-                   )
+                   ),
+                   tabPanel("Cruce de variables",
+                           sidebarLayout(
+                             sidebarPanel(
+                               menu4(),
+                               fluidRow(
+                                 wellPanel(
+                                   style = "background-color: #2c3e50;",
+                                   h3('¿Qué significa?',align="center",style = "color:#C2D1E0"),
+                                   br(),
+                                   h4("Selecciona el periodo de tiempo sobre el cuál quieres mirar el cruce de
+                                      variables.",style = "color:#C2D1E0"),
+                                   br(),
+                                   h4("Después selecciona dos variables de los selectores de arriba para ver cómo 
+                                      interactúan entre sí en cada uno de los distintos grupos que hay y 
+                                      a total.",style = "color:#C2D1E0")
+                                   )
+                                   ),
+                               width = 2
+                             ),    
+                             column(5,plotOutput("graf_cruces",height=100,width=1300))
+                             
+                           )
+                   ),
+                   tabPanel("Pedidos",
+                            sidebarLayout(
+                              sidebarPanel(
+                                menu5(),
+                                conditionalPanel(
+                                  condition = "input.panel5  == 'Gasto acumulado por grupo'",
+                                  #menu5(),
+                                  fluidRow(
+                                    wellPanel(
+                                      style = "background-color: #2c3e50;",
+                                      h3('¿Qué significa?',align="center",style = "color:#C2D1E0"),
+                                      br(),
+                                      h4("En esta gráfica puedes mirar cómo fue la distribución por sublíneas en cada 
+                                         uno de los grupos y en cada uno de los periodos de tiempo elegidos.",style = "color:#C2D1E0")
+                                      )
+                                  )
+                                ),
+                                conditionalPanel(
+                                  condition = "input.panel5  == 'Gasto por líneas'",
+                                  #menu5(),
+                                  submenu_5_linea(),
+                                  fluidRow(
+                                    wellPanel(
+                                      style = "background-color: #2c3e50;",
+                                      h3('¿Qué significa?',align="center",style = "color:#C2D1E0"),
+                                      br(),
+                                      h4("Selecciona el periodo de tiempo sobre el cuál quieres mirar la gráfica.",
+                                         style = "color:#C2D1E0"),
+                                      br(),
+                                      h4("Después selecciona la línea con la que quieres que se haga la gráfica.
+                                         ",style = "color:#C2D1E0"),
+                                      br(),
+                                      h4("Utilizando el botón de sublínea puedes elegir que la gráfica 
+                                         muestre todas las sublíneas de la línea que elegiste; si por el contrario eliges el 
+                                         botón de clase en la gráfica se muestran las clases de las sublíneas más populares de 
+                                         la línea que elegiste.",style = "color:#C2D1E0")
+                                      )
+                                    )
+                                  ),
+                                conditionalPanel(
+                                  condition = "input.panel5  == 'Gasto por sublíneas'",
+                                  #menu5(),
+                                  helpText("bla bla sublíneas")
+                                ),
+                                width = 2),
+                              mainPanel(
+                                tabsetPanel(
+                                  id="panel5",
+                                  tabPanel("Gasto acumulado por grupo",
+                                           column(5,plotOutput("grafs_gasto_acumulado",height=100,width=1300)),align="center"),
+                                  tabPanel("Gasto por líneas",
+                                           column(5,plotOutput("grafs_gasto_lineas",height=100,width=1300)),align="center")
+                                )
+                              )
+                              )
+                   ),
+                   tabPanel("Conclusiones",
+                            fluidPage(
+                              column(12,wellPanel(
+                                style = "background-color: #2c3e50;",
+                                h2(strong('Conclusiones Generales',style = "color:#C2D1E0")),
+                                p('Con el paso de los años hemos observado un cambio en la composición de edad de los clientes nuevos. En el
+                                  pasado los clientes nuevos se encontraban entre los 26 y los 45 años. Desde 2012 la edad de la mayoría de los 
+                                  clientes nuevos va 18 a 35 años. Este cambio puede ser favorable si logramos crear un sentimiento de lealtad entre ellos
+                                  y si tomamos las debidas precauciones.',style = "color:#C2D1E0;font-size:16pt"),
+                                p('Tomando en cuenta este cambio en la constitución de edad y que el banco entró a Perú en 2008 decidimos analizar la información 
+                                  en tres periodos de tiempo (antes de 2008, 2008 a 2011, 2012 a 2015). Debido a esto filtramos a los clientes que llegaron en cada 
+                                  uno de los intervalos de tiempo antes mencionados y obtuvimos grupos utilizando sus patrones históricos de comportamiento de compras',
+                                  style = "color:#C2D1E0;font-size:16pt"),
+                                p('En cada uno de los grupos creados podemos ver que hay personas que satisfacen sus necesidades y después abandonan al grupo. Estas personas
+                                  en general compran mercancías o préstamos personales en cantidades moderadas, terminan de pagar y después no vuelven a comprar. Estos clientes
+                                  son clientes buenos que no estamos logrando retener y que sería fructífero hacerlo.',style = "color:#C2D1E0;font-size:16pt"),
+                                p('Por otro lado, vemos que hay personas que tienen muchos pedidos de mercancías los cuáles van acompañados de una gran cantidad de pedidos de
+                                  préstamos personales y pedidos con TAZ. Estas personas, en general, tienen su status de línea de Crédito inactiva por cliente malo o cancelada.
+                                  Ahora que tenemos identificado este patrón sería bueno hacer un análisis más profundo de sus patrones de compra para identificar de forma preevntiva
+                                  personas que se están comportando de esa manera, con la finalidad de evitar que se conviertan en cartera vecida.',style = "color:#C2D1E0;font-size:16pt"),
+                                p('Las características de las personas que entraron antes del 2008 se pueden resumir en:',
+                                  tags$ul(
+                                    tags$li(strong("Cartera Vencida: "),"clientes con status de línea de crédito inactiva por malos, que tenían ocupado entre el 
+                                            80 y el 100 % de su línea de crédito y que hicieron muchos pedidos de mercancías."),
+                                    tags$li(strong("Moderados, no malos, muertos: "),"clientes con status de línea de crédito inactiva por tiempo que se atrasaron
+                                            poco, que deben poco y que dejaron hace mucho tiempo."),
+                                    tags$li(strong("Alto riesgo, muertos: "),"clientes que ya abandonaron la tienda y que en su historia acumularon muchos pedidos de mercancías, TAZ y préstamos
+                                            personales, que se atrasaron considerablemente y tienen mucho saldo."),
+                                    tags$li(strong("Activos y muertos de alto riesgo: "),"como los clientes del grupo anterior, pero con una considerable cantidad de 
+                                            clientes con línea de crédito activa. Hay que tener cuidado en que estos clientes no se conviertan en cartera vencida."),
+                                    style = "color:#C2D1E0;font-size:16pt"
+                                    ),style = "color:#C2D1E0;font-size:16pt"),
+                                p('Las características de las personas que entraron entre el 2008 y el 2011 se pueden resumir en:',
+                                  tags$ul(
+                                    tags$li(strong("Aceptables: "),"clientes con muchos pedidos que se atrasan poco y que ya no tienen pedidos activos."),
+                                    tags$li(strong("Recién muertos, bajo riesgo: "),"personas con pocos pedidos que ya no tienen activos, deben poco y dejaron
+                                            de comprar recientemente."),
+                                    tags$li(strong("Cartera de riesgo medio: "),"clientes con una distribución elongada de pedidos en todos los rubros, con 
+                                            atrasos moderados; una gran parte de ellos tienen su status de línea de crédito activa por lo que hay que tener cuidado
+                                            con ellos."),
+                                    tags$li(strong("Cartera de Riesgo Alto: "),"clientes con muchos pedidos en todos los rubros que están sobre endeudados. La 
+                                            mayor parte de ellos son clientes con status de línea de crédito inactiva por mal cliente"),
+                                    style = "color:#C2D1E0;font-size:16pt"
+                                    ),style = "color:#C2D1E0;font-size:16pt"),
+                                p('Las características de las personas que entraron entre el 2012 y el 2015 se pueden resumir en:',
+                                  tags$ul(
+                                    tags$li(strong("Aceptables y con riesgo bajo: "),"Personas que tienen status activo en su línea de crédito con pocos pedidos de mercancías
+                                            que en la actualidad no tienen pedidos activos."),
+                                    tags$li("Malos y de alto riesgo fase 3: ","clientes con muchos pedidos en todos los rubros; la mayor parte de ellos están sobre endeudados,
+                                            tienen muchos pedidos activos, muchos atrasos, pero no deben tanto dinero."),
+                                    tags$li(strong("Malos y de alto riesgo fase 2: "), "clientes con muchos pedidos en mercancías y en préstamos personales, con hasta el 80% de su línea de crédito usada, con dos o tres pedidos 
+                                            activos, con dos o tres atrasos y poco saldo"),
+                                    tags$li(strong("Malos y de alto riesgo fase 1: "), "personas con muchos pedidos de mercancías y préstamos personales con un pedido activo
+                                            y poco saldo."),
+                                    style = "color:#C2D1E0;font-size:16pt"
+                                    ),style = "color:#C2D1E0;font-size:16pt")
+                                    )
+                                  )
+                                  )
+                            
+                              )
+
 ))
