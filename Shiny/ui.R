@@ -101,14 +101,17 @@ shinyUI(navbarPage("",theme = shinytheme("flatly"),
                                         que se encuentra en esa categoría.",
                                        style = "color:#C2D1E0"),
                                     br(),
-                                    h4("En el botón de descarga que se encuentra abajo puedes obtener el layout de las variables ocupadas así como 
-                                       las categorías que conforman a dichas variables.",
+                                    h4("En el primer botón de descarga que se encuentra abajo puedes obtener el layout de las variables ocupadas así como 
+                                       las categorías que conforman a dichas variables. En el segundo, puedes descargar las personas que conforman el intervalo de tiempo que estás viendo; la base contiene los identificadores de cliente, 
+                                       el grupo al que pertenecen y el primer año en el que realizaron su compra",
                                        style = "color:#C2D1E0"),
                                     h3("Descarga el layout",style = "color:#C2D1E0"),
                                     br(),
-                                    downloadButton('layout','Layout')
-                                    )
-                                    ),
+                                    downloadButton('layout','Layout'),
+                                    h3("Descarga la base",style = "color:#C2D1E0"),
+                                    br(),
+                                    downloadButton('archivodescarga','Base')
+                                    )),
                                 width = 2),
                               mainPanel(column(5,imageOutput("imagen_grupos")))
                               )

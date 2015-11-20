@@ -25,7 +25,7 @@ menu1 <- function(){
           'Antes de 2008' = '2008',
           '2008 - 2011' = '2008 - 2011',
           '2012 - 2015' = '2012 - 2015'),
-        selected = c('2008'))
+        selected = c('2012 - 2015'))
    # )
     )}
 
@@ -40,7 +40,7 @@ menu_im <- function(){
         'Antes de 2008' = '2008',
         '2008 - 2011' = '2008 - 2011',
         '2012 - 2015' = '2012 - 2015'),
-      selected = c('2008'))
+      selected = c('2012 - 2015'))
     # )
   )}
 
@@ -56,7 +56,7 @@ menu_g <- function(){
         'Antes de 2008' = '2008',
         '2008 - 2011' = '2008 - 2011',
         '2012 - 2015' = '2012 - 2015'),
-      selected = c('2008'))
+      selected = c('2012 - 2015'))
     # )
   )}
 
@@ -71,7 +71,7 @@ menu2 <- function(){
         'Antes de 2008' = '2008',
         '2008 - 2011' = '2008 - 2011',
         '2012 - 2015' = '2012 - 2015'),
-      selected = c('2008'))
+      selected = c('2012 - 2015'))
     # )
   )}
 
@@ -86,7 +86,7 @@ menu3 <- function(){
         'Antes de 2008' = '2008',
         '2008 - 2011' = '2008 - 2011',
         '2012 - 2015' = '2012 - 2015'),
-      selected = c('2008'))
+      selected = c('2012 - 2015'))
     # )
   )}
 menu4 <- function(){
@@ -97,10 +97,10 @@ menu4 <- function(){
       'filtroAnio4', 
       label = '',
       choices = list(
-        '2008' = '2008',
+        'Antes de 2008' = '2008',
         '2008 - 2011' = '2008 - 2011',
         '2012 - 2015' = '2012 - 2015'),
-      selected = c('2008')),
+      selected = c('2012 - 2015')),
     br(),
     helpText(h4('Selecciona las variables que quieres cruzar.')),
     selectInput(
@@ -127,7 +127,7 @@ menu5 <- function(){
         'Antes de 2008' = '2008',
         '2008 - 2011' = '2008 - 2011',
         '2012 - 2015' = '2012 - 2015'),
-      selected = c('2008'))
+      selected = c('2012 - 2015'))
     # )
   )}
 
@@ -705,8 +705,9 @@ requerimientos<-function(){
 
   Activa                    
   Otro                      
-  Cancalada                
+  Cancelada                
   Inactiva por cliente malo
+  Inactiva por tiempo
   
   porc_cap_pago_usado_C –> Capacidad de Pago usada (%)
   

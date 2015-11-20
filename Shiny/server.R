@@ -410,4 +410,37 @@ shinyServer(function(input, output,session){
     }
   )
   
+  Dataset <- reactive({
+    archivodisplay<-input$filtroAnio_g
+    if (is.null(archivodisplay)) {
+      # User has not uploaded a file yet
+      return(data.frame())
+    }else{
+      if(input$filtroAnio_g=='2008'){
+        Dataset <- base_a_2008
+      }else{
+        if(input$filtroAnio_g=='2008 - 2011'){
+          Dataset <- base_2008_2011
+        }else{
+          Dataset <- base_2012_2015
+        }
+      }
+    }
+    return(Dataset)
+  })
+  
+  output$archivodescarga <- downloadHandler(
+    filename = "Datos.csv",
+    content = function(file){
+      tabla2<-Dataset() 
+      tabla2<- base_a_2008 %>%
+        as.data.frame() %>%
+        select(Folio, Pais, Canal, Sucursal, clase, anio_llegada)
+      
+      names(tabla2) <- c("Folio", "País", "Canal", "Sucursal", "Grupo", "Año Llegada")
+      
+      write.csv(tabla2,file,row.names=F)
+    }
+  )
+  
 })
