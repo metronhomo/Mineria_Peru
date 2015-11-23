@@ -8,8 +8,8 @@ library(lubridate)
 
 # Base_Peru_con_Grupos_y_Catalogo_sin_LINEA_CREDITO <- readRDS("./data/Base_Peru_con_Grupos_y_Catalogo_sin_LINEA_CREDITO.RDS")
 #Base_Red_Corregida_sin_LINEA_CREDITO <- readRDS("./data/Base_Red_Corregida_sin_LINEA_CREDITO.RDS")
-caracterizacion <- readRDS("./data/Base_caracterizacion_grupos.RDS")
-# caracterizacion <- readRDS("./data/Base_caracterizacion_grupos_2.RDS") #Nada más para que cargue rápido ahorita en el shiny, después ponerle la grande
+# caracterizacion <- readRDS("./data/Base_caracterizacion_grupos.RDS")
+caracterizacion <- readRDS("./data/Base_caracterizacion_grupos_2.RDS") #Nada más para que cargue rápido ahorita en el shiny, después ponerle la grande
 base_a_2008 <- readRDS("./data/base_a_2008.RDS")
 base_2008_2011 <- readRDS("./data/base_2008_2011.RDS")
 base_2012_2015 <- readRDS("./data/base_2012_2015.RDS")
@@ -19,6 +19,9 @@ cluster_a_2008 <- readRDS("./data/cluster_a_2008.RDS")
 correlaciones_2008_2011 <- readRDS("./data/correlaciones_2008_2011.RDS")
 correlaciones_2012_2015 <- readRDS("./data/correlaciones_2012_2015.RDS")
 correlaciones_a_2008 <- readRDS("data/correlaciones_a_2008.RDS")
+grafs_pedidos_sublinea_a_2008 <- readRDS("./data/grafs_pedidos_sublinea_a_2008.RDS")
+grafs_pedidos_sublinea_2008_2011 <- readRDS("./data/grafs_pedidos_sublinea_2008_2011.RDS")
+grafs_pedidos_sublinea_2012_2015 <- readRDS("./data/grafs_pedidos_sublinea_2012_2015.RDS")
 #Resumen_variables_extra_sin_LINEA_CREDITO_con_grupos <- readRDS("./data/Resumen_variables_extra_sin_LINEA_CREDITO_con_grupos.RDS")
 
 idx <- base_2008_2011$Edocivil == "error"

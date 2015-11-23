@@ -242,4 +242,127 @@ shinyServer(function(input, output,session){
   height = 1000,
   width = 1300)
   
+  
+#   data_pedidos <- reactive({
+#     if(input$filtroAnio5 == "2008") {
+#       a <- base_a_2008
+#     }
+#     else{
+#       if(input$filtroAnio5 == "2008 - 2011") {
+#         a <- base_2008_2011
+#       }
+#       else
+#         a <- base_2012_2015
+#     }
+#     return(a)
+#   })
+  
+  data_pedidos <- reactive({
+    input$filtroAnio5
+  })
+  
+  output$grafs_gasto_acumulado <- renderPlot({
+    if(data_pedidos() == "2008") {
+      base <- base_a_2008
+    }
+    else{
+      if(data_pedidos() == "2008 - 2011") {
+        base <- base_2008_2011
+      }
+      else
+        base <- base_2012_2015
+    }
+    
+    # base <- data_pedidos()
+    
+    gasto <- base %>%
+      group_by(clase,Depto_Desc) %>%
+      summarise(total=sum(as.numeric(ITV),na.rm=T)) %>%
+      mutate(porcentaje=total/sum(total,na.rm=T))
+    
+    gasto_t<-base%>%
+      group_by(Depto_Desc)%>%
+      summarise(total=sum(as.numeric(ITV),na.rm=T))%>%
+      mutate(porcentaje=total/sum(total,na.rm=T))
+    
+    gasto_t$clase<-"General"
+    
+    #unimos todos los dataframes
+    gasto_lineas<-rbind(gasto,gasto_t)
+    gasto_lineas$Depto_Desc<-as.character(gasto_lineas$Depto_Desc)
+    aux<-gasto_t%>%
+      arrange(desc(total))
+    orden<-unique(aux$Depto_Desc)
+    
+    gasto_lineas$Depto_Desc<-factor(gasto_lineas$Depto_Desc,levels=orden)
+    
+    graf_barras(df=gasto_lineas,var_x="Depto_Desc",var_y="porcentaje",titulo="Gasto acumulado por grupo",
+                facet=T, var_facet="clase", angulo=90,x_lab="Pedidos",n=1)
+    
+    },
+    height = 1000,
+    width = 1300
+  )
+  
+  input_linea <- reactive({
+    input$filtroLinea
+  })
+  
+  tipo_graf <- reactive({
+    input$total_sublinea
+  })
+  
+  output$grafs_gasto_lineas <- renderPlot({
+    tipo <- tipo_graf()
+    if(tipo == "Total"){
+      if(data_pedidos() == "2008") {
+        base <- base_a_2008
+      }
+      else{
+        if(data_pedidos() == "2008 - 2011") {
+          base <- base_2008_2011
+        }
+        else
+          base <- base_2012_2015
+      }
+      
+      # base <- data_pedidos()
+      depto <- input_linea()
+      
+      slineas_compu_t<-base%>%
+        filter(Depto_Desc == depto)%>%
+        group_by(Subdepto_Desc)%>%
+        summarise(total=sum(as.numeric(ITV),na.rm=T))%>%
+        mutate(porcentaje=total/sum(total,na.rm=T))
+      
+      slineas_compu_t$clase<-"General"
+      
+      slineas_compu<-base%>%
+        filter(Depto_Desc == depto)%>%
+        group_by(clase, Subdepto_Desc)%>%
+        summarise(total = sum(as.numeric(ITV),na.rm=T))%>%
+        mutate(porcentaje = total/sum(total,na.rm=T))
+      
+      slineas_compu<-rbind(slineas_compu, slineas_compu_t)
+      slineas_compu$Subdepto_Desc<-as.character(slineas_compu$Subdepto_Desc)
+      
+      aux<-slineas_compu_t%>%
+        arrange(desc(total))
+      orden<-unique(aux$Subdepto_Desc)
+      
+      slineas_compu$Subdepto_Desc<-factor(slineas_compu$Subdepto_Desc,levels=orden)
+      
+      graf_barras(df=slineas_compu,var_x="Subdepto_Desc",var_y="porcentaje",
+                  titulo = paste("Gasto por sublíneas de la línea: ", depto),
+                  facet=T, var_facet="clase", angulo=90, x_lab = paste("Sublíneas de la línea ", depto),n=1)
+    }
+    else {
+      
+    }
+    
+  },
+  height = 1000,
+  width = 1300
+  )
+  
 })

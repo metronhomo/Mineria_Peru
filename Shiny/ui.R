@@ -21,7 +21,8 @@ shinyUI(navbarPage("Minería de datos Perú",theme = shinytheme("flatly"),
                                 ),
                                 width = 2),
                               mainPanel(
-                                tabsetPanel(id="panel1",
+                                tabsetPanel(
+                                  id="panel1",
                                   tabPanel("Ingreso de Personas por Edad y Año",
                                            column(5,plotOutput("edad_anio",height=100,width=1300)),align="center"),
                                   tabPanel("Interacción entre variables",
@@ -52,6 +53,7 @@ shinyUI(navbarPage("Minería de datos Perú",theme = shinytheme("flatly"),
                                 width = 2),    
                               mainPanel(
                                 tabsetPanel(
+                                  id="panel2",
                                   tabPanel("Distribución de personas, productos y gasto",
                                            column(5,plotOutput("personas_productos_gasto",height=100,width=1300)),align="center"),
                                   tabPanel("Género",
@@ -99,32 +101,41 @@ shinyUI(navbarPage("Minería de datos Perú",theme = shinytheme("flatly"),
                                 menu4(),
                                 width = 2
                               ),    
+                              column(5,plotOutput("graf_cruces",height=100,width=1300))
+                              
+                            )
+                   ),
+                   tabPanel("Pedidos",
+                            sidebarLayout(
+                              sidebarPanel(
+                                menu5(),
+                                conditionalPanel(
+                                  condition = "input.panel5  == 'Gasto acumulado por grupo'",
+                                  #menu5(),
+                                  helpText("bla bla gasto grupo")
+                                ),
+                                conditionalPanel(
+                                  condition = "input.panel5  == 'Gasto por líneas'",
+                                  #menu5(),
+                                  submenu_5_linea(),
+                                  helpText("bla bla lineas")
+                                ),
+                                conditionalPanel(
+                                  condition = "input.panel5  == 'Gasto por sublíneas'",
+                                  #menu5(),
+                                  helpText("bla bla sublíneas")
+                                ),
+                                width = 2),
                               mainPanel(
-#                                 tabsetPanel(
-#                                   tabPanel("Algo",
-#                                            column(5,plotOutput("graf_cruces",height=100,width=1300)),align="center")
-#                                 )
-                                column(5,plotOutput("graf_cruces",height=100,width=1300))
-                                
+                                tabsetPanel(
+                                  id="panel5",
+                                  tabPanel("Gasto acumulado por grupo",
+                                           column(5,plotOutput("grafs_gasto_acumulado",height=100,width=1300)),align="center"),
+                                  tabPanel("Gasto por líneas",
+                                           column(5,plotOutput("grafs_gasto_lineas",height=100,width=1300)),align="center")
+                                )
                               )
                             )
                    )
-#                    tabPanel("Pedidos",
-#                             sidebarLayout(
-#                               sidebarPanel(
-#                                 menu5(),
-#                                 width = 2
-#                               ),    
-#                               mainPanel(
-#                                 tabsetPanel(
-#                                   tabPanel("Gasto acumulado por grupo",
-#                                            column(5,plotOutput("plot",height=100,width=1300)),align="center"),
-#                                   tabPanel("Gasto por sublíneas por grupo",
-#                                            column(5,plotOutput("plot",height=100,width=1300)),align="center")
-#                                 )
-#                                 
-#                               )
-#                             )
-#                    )
                    
 ))
